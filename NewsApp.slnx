@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="NewsApp.API/NewsApp.API.csproj" />
+  <Project Path="NewsApp.Application/NewsApp.Application.csproj" />
+  <Project Path="NewsApp.Domain/NewsApp.Domain.csproj" />
+  <Project Path="NewsApp.Infrastructure/NewsApp.Infrastructure.csproj" />
+</Solution>
