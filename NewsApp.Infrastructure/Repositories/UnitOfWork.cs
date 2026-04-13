@@ -1,0 +1,27 @@
+﻿using NewsApp.Domain.Interfaces;
+using NewsApp.Infrastructure.Data;
+
+namespace NewsApp.Infrastructure.Repositories
+{
+    public class UnitOfWork : IUnitOfWork
+    {
+        private readonly NewsDbContext _context;
+
+        public INewsRepository News { get; private set; }
+        public ICategoryRepository Categories { get; private set; }
+        public IUserRepository Users { get; private set; }
+
+        public UnitOfWork(NewsDbContext context)
+        {
+            _context = context;
+            News = new NewsRepository(_context);
+            Categories = new CategoryRepository(_context);
+            Users = new UserRepository(_context);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+    }
+}
