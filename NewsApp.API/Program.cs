@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using NewsApp.API.Services;
 using NewsApp.Application.Queries;
 using NewsApp.Domain.Interfaces;
 using NewsApp.Infrastructure.Data;
 using NewsApp.Infrastructure.Repositories;
+using NewsApp.Infrastructure.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,14 +17,15 @@ builder.Services.AddDbContext<NewsDbContext>(options =>
 
 // 2. Dependency Injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<FileService>();
 
 // 3. MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetLatestNewsQuery).Assembly));
 
-// 4. JWT Authentication
+// 4. JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
+    .AddJwtBearer(options => {
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -36,12 +39,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // 5. CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAngular", policy =>
-    {
-        policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
-    });
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowAngular", policy => policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
 });
 
 builder.Services.AddControllers();
@@ -53,9 +52,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "NewsApp API");
+        options.RoutePrefix = string.Empty; // هذا السطر السحري يجعل Swagger يفتح مباشرة على الجذر (بدون /swagger)
+    });
 }
-
+app.UseStaticFiles(); // مهم جداً لكي تظهر الصور والفيديوهات المرفوعة
 app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();

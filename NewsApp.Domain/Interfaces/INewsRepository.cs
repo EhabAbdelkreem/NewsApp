@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NewsApp.Domain.Interfaces
 {
-    {
+   
     public interface INewsRepository
     {
         Task<IEnumerable<News>> GetAllAsync();

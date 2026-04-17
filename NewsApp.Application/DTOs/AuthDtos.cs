@@ -1,26 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NewsApp.Application.DTOs
+﻿namespace NewsApp.Application.DTOs
 {
-    public class LoginDto
-    {
-        public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-    }
-
-    public class RegisterDto
-    {
-        public string FullName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-    }
-
-    public class AuthResponseDto
-    {
-        public string Token { get; set; } = string.Empty;
-        public string FullName { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty;
-    }
+    public record LoginDto(string Email, string Password);
+    public record RegisterDto(string FullName, string Email, string Password);
+    public record AuthResponseDto(string Token, string FullName, string Role);
 }

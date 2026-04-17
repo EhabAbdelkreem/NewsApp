@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NewsApp.Application.DTOs
+﻿namespace NewsApp.Application.DTOs
 {
     public class NewsDto
     {

@@ -5,10 +5,8 @@ using NewsApp.Domain.Interfaces;
 
 namespace NewsApp.Application.Commands
 {
-    public class CreateNewsCommand : IRequest<Guid>
-    {
-        public CreateNewsDto NewsData { get; set; } = new CreateNewsDto();
-    }
+    // تعريف الـ Command كـ Record يأخذ الـ Data
+    public record CreateNewsCommand(CreateNewsDto Data) : IRequest<Guid>;
 
     public class CreateNewsCommandHandler : IRequestHandler<CreateNewsCommand, Guid>
     {
@@ -24,19 +22,18 @@ namespace NewsApp.Application.Commands
             var news = new News
             {
                 Id = Guid.NewGuid(),
-                Title = request.NewsData.Title,
-                Content = request.NewsData.Content,
-                ImageUrl = request.NewsData.ImageUrl,
-                VideoUrl = request.NewsData.VideoUrl,
-                IsBreaking = request.NewsData.IsBreaking,
-                CategoryId = request.NewsData.CategoryId,
+                Title = request.Data.Title,
+                Content = request.Data.Content,
+                ImageUrl = request.Data.ImageUrl,
+                VideoUrl = request.Data.VideoUrl,
+                IsBreaking = request.Data.IsBreaking,
+                CategoryId = request.Data.CategoryId,
                 PublishDate = DateTime.UtcNow,
                 Views = 0
             };
 
             await _unitOfWork.News.AddAsync(news);
             await _unitOfWork.SaveChangesAsync();
-
             return news.Id;
         }
     }

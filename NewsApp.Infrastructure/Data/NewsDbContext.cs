@@ -15,11 +15,20 @@ namespace NewsApp.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // إضافة بيانات أولية (Seed Data) للأقسام لتسهيل التجربة
+            // استخدام Guid ثابتة لتجنب رسالة (PendingModelChangesWarning)
             modelBuilder.Entity<Category>().HasData(
-                new Category { Id = Guid.NewGuid(), Name = "سياسة", Slug = "politics" },
-                new Category { Id = Guid.NewGuid(), Name = "رياضة", Slug = "sports" },
-                new Category { Id = Guid.NewGuid(), Name = "اقتصاد", Slug = "economy" }
+                new Category
+                {
+                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    Name = "سياسة",
+                    Slug = "politics"
+                },
+                new Category
+                {
+                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                    Name = "رياضة",
+                    Slug = "sports"
+                }
             );
         }
     }

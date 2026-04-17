@@ -6,10 +6,9 @@ namespace NewsApp.Infrastructure.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly NewsDbContext _context;
-
-        public INewsRepository News { get; private set; }
-        public ICategoryRepository Categories { get; private set; }
-        public IUserRepository Users { get; private set; }
+        public INewsRepository News { get; }
+        public ICategoryRepository Categories { get; }
+        public IUserRepository Users { get; }
 
         public UnitOfWork(NewsDbContext context)
         {
@@ -18,10 +17,6 @@ namespace NewsApp.Infrastructure.Repositories
             Categories = new CategoryRepository(_context);
             Users = new UserRepository(_context);
         }
-
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync();
-        }
+        public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
     }
 }
